@@ -34,6 +34,12 @@ npm install neo-proxy --save
 
 See `example.js` for a more full-fledged version.
 
+## Credits
+
+Thank you [@No9](https://github.com/no9) for <https://github.com/No9/harmon>,
+from which I borrowed a good amount of code!
+— [@DTrejo](http://dtrejo.com)
+
 ## License
 
 MIT
