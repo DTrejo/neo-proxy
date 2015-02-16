@@ -28,7 +28,8 @@ npm install neo-proxy --save
     port: 8888,
     target: 'http://dtrejo.com',
     needle: '</body>',
-    customHTML: '<script>alert("Hello, it's working! — DTrejo")</script>'
+    customHTML: '<script>alert("Hello, it's working! — DTrejo")</script>',
+    rewriteUrlsHost: 'localhost' // or '10.1.1.250'
   })
 ```
 
