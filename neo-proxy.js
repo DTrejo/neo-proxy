@@ -110,8 +110,10 @@ function neoProxy(options) {
 function rewriteUrlsFunction (host, localHost, port) {
   var links = document.getElementsByTagName('a');
   for (var i = links.length - 1; i >= 0; i--) {
-    var link = links[i],
-      href = link.getAttribute('href');
-    if (href && href.indexOf(host) > -1 ) { link.setAttribute('href', href.replace(host, 'http://' + localHost + ':' + port) + '?host=' + host) };
+    var link = links[i]
+    var href = link.getAttribute('href')
+    if (href && href.indexOf(host) > -1 ) {
+      link.setAttribute('href', href.replace(host, 'http://' + localHost + ':' + port) + '?host=' + host)
+    };
   };
 }
