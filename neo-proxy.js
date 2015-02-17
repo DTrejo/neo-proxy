@@ -7,11 +7,11 @@ var httpProxy = require('http-proxy')
 module.exports = neoProxy
 
 function neoProxy(options) {
-  console.assert(options.port >= 0)
-  console.assert(options.target)
-  console.assert(options.needle)
-  console.assert(options.customHTML)
-  console.assert(options.rewriteUrlsHost)
+  console.assert(options.port >= 0, "Please specify a port")
+  console.assert(options.target, "Please specify a target")
+  console.assert(options.needle, "Please pass in a needle")
+  console.assert(options.customHTML, "Please provide customHTML")
+  options.rewriteUrlsHost = options.rewriteUrlsHost || 'localhost'
 
   //
   // Rewrite URLs of HTML link elements with your local host IP
@@ -19,7 +19,9 @@ function neoProxy(options) {
   var rewriteUrlsScript = ''
   if (options.rewriteUrlsHost) {
     rewriteUrlsScript = "<script>"
-    rewriteUrlsScript += rewriteUrlsFunction + "; rewriteUrlsFunction('" + options.target + "', '" + options.rewriteUrlsHost + "', " + options.port + ");"
+    rewriteUrlsScript += rewriteUrlsFunction + "; rewriteUrlsFunction('"
+      + options.target + "', '" + options.rewriteUrlsHost + "', "
+      + options.port + ");"
     rewriteUrlsScript += "</script>"
   }
 
