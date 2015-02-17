@@ -1,7 +1,7 @@
 {
   "name": "neo-proxy",
   "description": "A man-in-the-middle (mitm) proxy that impersonates the target site and allows you to modify the target's http response before sending it back to the client.",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "author": "David Trejo",
   "bugs": {
     "url": "https://github.com/DTrejo/neo-proxy/issues"
