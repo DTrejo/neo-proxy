@@ -11,6 +11,17 @@ function neoProxy(options) {
   console.assert(options.target)
   console.assert(options.needle)
   console.assert(options.customHTML)
+  console.assert(options.rewriteUrlsHost)
+
+  //
+  // Rewrite URLs of HTML link elements with your local host IP
+  //
+  var rewriteUrlsScript = ''
+  if (options.rewriteUrlsHost) {
+    rewriteUrlsScript = "<script>"
+    rewriteUrlsScript += rewriteUrlsFunction + "; rewriteUrlsFunction('" + options.target + "', '" + options.rewriteUrlsHost + "', " + options.port + ");"
+    rewriteUrlsScript += "</script>"
+  }
 
   //
   // properly configure the proxy to pretend that the request came from the
@@ -36,11 +47,8 @@ function neoProxy(options) {
     proxy.web(req, res, proxyOptions)
   })
   app.listen(options.port)
-  console.log('%s neoProxy: Listening on http://localhost:%s'
-    , options.target, options.port)
-  console.log('%s neoProxy: Will find `%s` and prepend\n`%s`.'
-    , options.target, options.needle, options.customHTML)
-  console.log()
+  console.log('http://localhost:%s -> %s, hrefs %s'
+    , options.port , options.target, options.rewriteUrlsHost)
 
   // via http://ghub.io/harmon
   function replacer(req, res, next) {
@@ -75,7 +83,10 @@ function neoProxy(options) {
       // Only run data through replacer if we have HTML, and needle is present
       var chunk = ''
       if (res.isHtml && (chunk = data.toString(encoding)) && chunk.indexOf(options.needle) > -1) {
-        chunk = chunk.replace(options.needle, options.customHTML + options.needle)
+        chunk = chunk.replace(options.needle, options.customHTML + rewriteUrlsScript + options.needle)
+
+        console.log('%s: Found `%s` and prepended `%s`'
+          , options.target, options.needle, options.customHTML)
         _write.call(res, new Buffer(chunk))
 
       } else {
@@ -94,4 +105,15 @@ function neoProxy(options) {
   options.proxy = proxy
 
   return options
+}
+
+function rewriteUrlsFunction (host, localHost, port) {
+  var links = document.getElementsByTagName('a');
+  for (var i = links.length - 1; i >= 0; i--) {
+    var link = links[i]
+    var href = link.getAttribute('href')
+    if (href && href.indexOf(host) > -1 ) {
+      link.setAttribute('href', href.replace(host, 'http://' + localHost + ':' + port) + '?host=' + host)
+    };
+  };
 }

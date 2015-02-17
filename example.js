@@ -4,14 +4,17 @@ var neoProxy = require('./')
 
 var exec = require('shelljs').exec
 
-var customHTML = '<script>alert("also visible at http://'+geten0BroadcastIP()
+var localIp = geten0BroadcastIP()
+
+var customHTML = '<script>alert("also visible at http://'+localIp
   +':'+startingPort+'")</script>'
 
 var batman = neoProxy({
   port: startingPort,
   target: 'http://dtrejo.com',
   needle: '</body>',
-  customHTML: customHTML
+  customHTML: customHTML,
+  rewriteUrlsHost: localIp
 })
 
 function geten0BroadcastIP() {
